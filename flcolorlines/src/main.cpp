@@ -1,47 +1,57 @@
-#include <QApplication>
+//custom includes
+#include "ui/UI.MainWindow.hpp"
+#include "controller/Controller.GameController.hpp"
+#include "controller/Controller.HighscoreController.hpp"
+
+//global includes
 #include <iostream>
 #include <cstdlib>
 
+#include <QApplication>
+
 #include <GL/glut.h>
 
-#include "mainwindow.h"
-
-#ifdef Q_WS_X11
-    #include <X11/Xlib.h> //include the xlib for linux
+#ifdef Q_OS_UNIX
+    //include the xlib for linux
+    #include <X11/Xlib.h>
 #endif
 
-#include "Controller.GameController.h"
-#include "Controller.HighscoreController.h"
 
+//the main method
 
 int main(int argc, char *argv[])
- {
+{
 
     srand(time(0));
 
     glutInit(&argc, argv);
 
-    #ifdef Q_WS_X11
-    XInitThreads();//initialize the x threads for linux
+    #ifdef Q_OS_UNIX
+    //initialize the x threads for linux
+    XInitThreads();
     #endif
 
     controller::GameController* controller = new controller::GameController();
-//    controller->setOptions(9,9,7,3,5);//todo remove (no initial field)
-//    controller->startNewMatch();
 
     controller::HighscoreController* hictrl = new controller::HighscoreController();
     hictrl->setStandardPath("crypt.sav");
     hictrl->readFromFile();
 
     QApplication a(argc, argv);
-    MainWindow w;
+    ui::MainWindow w;
     w.setGameController(controller);
     w.setHighscoreController(hictrl);
 
     //w.window
     w.show();
 
+    int result = a.exec();
 
+    delete controller;
+    controller = nullptr;
+
+    delete hictrl;
+    hictrl = nullptr;
     
-    return a.exec();
+    return result;
 }

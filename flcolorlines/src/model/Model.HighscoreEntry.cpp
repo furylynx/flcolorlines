@@ -1,5 +1,4 @@
-
-#include "Model.HighscoreEntry.h"
+#include "Model.HighscoreEntry.hpp"
 
 using namespace model;
 

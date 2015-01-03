@@ -1,9 +1,4 @@
-#include <iostream>
-#include <cstdlib>
-#include <assert.h>
-
-#include "Controller.GameController.h"
-
+#include "Controller.GameController.hpp"
 
 using namespace controller;
 

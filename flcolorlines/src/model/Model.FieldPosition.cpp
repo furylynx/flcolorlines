@@ -1,8 +1,4 @@
-#include <sstream>
-#include <string>
-#include <iostream>
-
-#include "Model.FieldPosition.h"
+#include "Model.FieldPosition.hpp"
 
 using namespace model;
 
