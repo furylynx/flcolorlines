@@ -1,7 +1,4 @@
-#include <assert.h>
-
-#include "Model.TimeOperator.h"
-
+#include "Model.TimeOperator.hpp"
 
 using namespace model;
 

@@ -1,10 +1,4 @@
-#include <assert.h>
-#include <algorithm>
-#include <ctime>
-#include <iostream>
-#include <fstream>
-
-#include "Controller.HighscoreController.h"
+#include "Controller.HighscoreController.hpp"
 
 using namespace controller;
 

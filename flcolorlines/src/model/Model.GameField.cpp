@@ -1,8 +1,4 @@
-#include <assert.h>
-#include <iostream>
-
-#include "Model.GameField.h"
-
+#include "Model.GameField.hpp"
 
 using namespace model;
 

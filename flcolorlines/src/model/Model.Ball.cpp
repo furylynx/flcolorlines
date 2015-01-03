@@ -1,8 +1,4 @@
-#include <sstream>
-#include <string>
-#include <iostream>
-
-#include "Model.Ball.h"
+#include "Model.Ball.hpp"
 
 using namespace model;
 
