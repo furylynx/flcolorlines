@@ -37,6 +37,7 @@
 
 using namespace controller;
 
+
 RenderThread::RenderThread( ui::GLWidget & _glw )
         : QThread(),
         glw(_glw),

@@ -62,7 +62,6 @@ namespace ui
     class GLWidget;
 }
 
-
 namespace controller
 {
 /** CPU time saving OpenGL rendering thread.
