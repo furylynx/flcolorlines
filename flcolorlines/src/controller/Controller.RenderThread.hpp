@@ -62,7 +62,6 @@ namespace ui
     class GLWidget;
 }
 
-
 namespace controller
 {
 /** CPU time saving OpenGL rendering thread.
@@ -140,8 +139,7 @@ private:
 
     QMutex selectedFieldsMutex;
     std::queue<QPoint> selectedFieldsQueue;
-    QMutex hoveredFieldsMutex;
-    std::queue<QPoint> hoveredFieldsQueue;
+    QPoint hoveredPoint;
 
 
     // example implmentation members

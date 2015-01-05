@@ -37,6 +37,7 @@
 
 using namespace controller;
 
+
 RenderThread::RenderThread( ui::GLWidget & _glw )
         : QThread(),
         glw(_glw),
@@ -116,13 +117,8 @@ void RenderThread::run( )
 
 
         //handle mouse moves
-        hoveredFieldsMutex.lock();
-        while(hoveredFieldsQueue.size() > 0)
-        {
-            setHoveredField(faceAtPosition(hoveredFieldsQueue.back()));
-            hoveredFieldsQueue.pop();
-        }
-        hoveredFieldsMutex.unlock();
+        setHoveredField(faceAtPosition(hoveredPoint));
+
 
         // render code goes here
         paintGL();
@@ -950,9 +946,7 @@ void RenderThread::selectField(const QPoint &pos)
 
 void RenderThread::hoverField(const QPoint &pos)
 {
-    hoveredFieldsMutex.lock();
-    hoveredFieldsQueue.push(pos);
-    hoveredFieldsMutex.unlock();
+    hoveredPoint = pos;
 }
 
 

@@ -36,6 +36,7 @@
 
 using namespace ui;
 
+
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent),
     glt(*this)
