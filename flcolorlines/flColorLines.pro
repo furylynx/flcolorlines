@@ -5,18 +5,23 @@
 #-------------------------------------------------
 
 QT       += core gui opengl
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+ win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../projects/mylib/release/ -lGLU -lglut
+ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../projects/mylib/debug/ --lGLU -lglut
+ else:symbian:
+ else:unix: LIBS += -lGLU -lglut -lX11
 
 CONFIG += c++11
 
-LIBS += -lGLU -lglut -lX11 #-lglut  # change this to the right path on system
+#LIBS += -lGLU -lglut #-lX11 #-lglut  # change this to the right path on system
 
 #LIBS += -L /usr/lib/x86_64-linux-gnu/ -lGLU -lglut  # change this to the right path on system
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 
 TARGET = flColorLines
 TEMPLATE = app
-
 
 SOURCES += src/main.cpp\
     src/model/Model.Ball.cpp \
