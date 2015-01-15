@@ -22,29 +22,89 @@ class HighscoreController
 
 public:
 
+    /**
+     * Creates a new highscore controller.
+     */
     HighscoreController();
-    ~HighscoreController();
+    virtual ~HighscoreController();
 
-    int addEntry(int score, std::string name, std::string field); //returns the position
+    /**
+     * Adds a new entry to the highscores table and returns the position of the new entry in the list.
+     *
+     * @param score The achieved score.
+     * @param name The name of the player.
+     * @param field The field string describing the details of the field.
+     * @return The position in the table.
+     */
+    virtual int addEntry(int score, std::string name, std::string field);
 
-    model::HighscoreEntry getEntryAt(int pos);
+    /**
+     * Returns the entry at the given position.
+     *
+     * @param pos The position
+     * @return The entry.
+     */
+    virtual model::HighscoreEntry getEntryAt(int pos);
 
-    std::vector<model::HighscoreEntry> getEntries();
+    /**
+     * Returns all entries of the table.
+     *
+     * @return All entries.
+     */
+    virtual std::vector<model::HighscoreEntry> getEntries();
 
-    void readFromFile();
-    void readFromFile(std::string path);
+    /**
+     * Reads the highscores table from the default file.
+     */
+    virtual void readFromFile();
 
-    void writeToFile();
-    void writeToFile(std::string path);
+    /**
+     * Reads the highscores table from the given file.
+     *
+     * @param path The path to the highscores file.
+     */
+    virtual void readFromFile(std::string path);
 
-    void setStandardPath(std::string path);
-    std::string getStandardPath();
+    /**
+     * Writes the highscores table to the default file.
+     */
+    virtual void writeToFile();
 
-    void clear();
+    /**
+     * Writes the highscores table to the given file.
+     * @param path The path to the highscores file.
+     */
+    virtual void writeToFile(std::string path);
+
+    /**
+     * Sets the default path for the highscores file.
+     *
+     * @param path The default path.
+     */
+    virtual void setDefaultPath(std::string path);
+
+    /**
+     * Returns the default path for the highscores file.
+     *
+     * @return The default path.
+     */
+    virtual std::string getDefaultPath();
+
+    /**
+     * Clears the highscores table.
+     */
+    virtual void clear();
 
 private:
+    /**
+     * The highscore entries.
+     */
     std::vector<model::HighscoreEntry> entries;
-    std::string standardPath;
+
+    /**
+     * The default path.
+     */
+    std::string defaultPath;
 
 };
 

@@ -88,7 +88,7 @@ void HighscoresFrame::onShow(){
     }
 
     std::ostringstream ostream;
-    ostream << hictrl->getStandardPath() << ".bak";
+    ostream << hictrl->getDefaultPath() << ".bak";
     std::string path(ostream.str());
 
     std::ifstream infile(path.c_str());
@@ -101,7 +101,7 @@ void HighscoresFrame::clickedClear(){
     if (hictrl != 0){
 
         std::ostringstream ostream;
-        ostream << hictrl->getStandardPath() << ".bak";
+        ostream << hictrl->getDefaultPath() << ".bak";
         std::string path(ostream.str());
 
         hictrl->writeToFile(path);
@@ -121,7 +121,7 @@ void HighscoresFrame::clickedRestore(){
 
     if (hictrl != 0){
         std::ostringstream ostream;
-        ostream << hictrl->getStandardPath() << ".bak";
+        ostream << hictrl->getDefaultPath() << ".bak";
         std::string path(ostream.str());
 
         std::ifstream infile(path.c_str());

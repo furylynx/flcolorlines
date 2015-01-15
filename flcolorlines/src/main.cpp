@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     controller::GameController* controller = new controller::GameController();
 
     controller::HighscoreController* hictrl = new controller::HighscoreController();
-    hictrl->setStandardPath("crypt.sav");
+    hictrl->setDefaultPath("crypt.sav");
     hictrl->readFromFile();
 
     QApplication a(argc, argv);
