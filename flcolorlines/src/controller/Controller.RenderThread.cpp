@@ -214,11 +214,14 @@ void RenderThread::draw()
     long millisdiff = timeOperator->getTimeSinceMark();//((timestampNow.tv_sec - timestamp.tv_sec) * 1000) + ((timestampNow.tv_nsec - timestamp.tv_nsec) / 1000000);
 
     if (millisdiff == 0)
+    {
         millisdiff = 1;
+    }
 
     framerate = framecount / ((float) millisdiff / 1000);
 
-    if (millisdiff >= 1000){
+    if (millisdiff >= 1000)
+    {
         timeOperator->setMark();
         framecount = 0;
     }
@@ -236,19 +239,28 @@ void RenderThread::draw()
     //get the gamecontroller
     controller::GameController* controller = glw.getGameController();
 
-    if(controller == 0){
+    if(controller == 0)
+    {
         drawIdleSequence();
         return;
-    }else
-        if (!controller->areOptionsSet()){
+    }
+    else
+    {
+        if (!controller->areOptionsSet())
+        {
             drawIdleSequence();
             return;
         }
+    }
 
     if (initialAnimation)
+    {
         drawInitialAnimation();
+    }
     else
+    {
         drawNormalFieldWithAnimation();
+    }
 }
 
 void RenderThread::drawNormalField()
@@ -257,16 +269,16 @@ void RenderThread::drawNormalField()
     controller::GameController* controller = glw.getGameController();
     model::GameField* field = controller->getGameField();
 
-    if (field == 0){
+    if (field == 0)
+    {
         drawIdleSequence();
         return;
     }
 
-
-
     //get path between selected and hovered field
     std::vector<model::FieldPosition> path;
-    if (hoveredField != selectedField && selectedField != -1 && hoveredField != -1){
+    if (hoveredField != selectedField && selectedField != -1 && hoveredField != -1)
+    {
 
         model::FieldPosition pos1;
         pos1.posX = selectedField%field->getDimensionX();
@@ -288,9 +300,13 @@ void RenderThread::drawNormalField()
     GLfloat dist = -9;
 
     if (field->getDimensionX() >= field->getDimensionY())
+    {
         dist = field->getDimensionX()*(-1);
+    }
     else
+    {
         dist=field->getDimensionY()*(-1);
+    }
 
     //GLfloat dist = -9;
 
@@ -300,12 +316,15 @@ void RenderThread::drawNormalField()
     glTranslatef(((rotationZ*dist*(-1))/90)*(-rotationX/70),(rotationX*dist)/90, (rotationX*dist)/90);
 
     //draw each field of the game
-    for (int i = 0; i< field->getDimensionX(); i++){
-        for (int j = 0; j< field->getDimensionY();j++){
+    for (int i = 0; i< field->getDimensionX(); i++)
+    {
+        for (int j = 0; j< field->getDimensionY();j++)
+        {
 
             //encolor the field
             QColor c;
-            if ((i % 2 == 0 && j % 2 == 0) || (i %2 == 1 && j % 2 == 1) ){
+            if ((i % 2 == 0 && j % 2 == 0) || (i %2 == 1 && j % 2 == 1) )
+            {
                 c.setRedF(0.5f);
                 c.setGreenF(0.5f);
                 c.setBlueF(0.5f);
@@ -322,14 +341,23 @@ void RenderThread::drawNormalField()
 
             // highlight selected and hovered field
             if(name == selectedField)
+            {
                 c = Qt::white;
+            }
             else
+            {
                 if ((name == hoveredField && path.size() > 1) || (selectedField == -1 && hoveredField == name))
+                {
                     c=Qt::lightGray;
+                }
                 else
+                {
                     if (name == hoveredField && path.size() <= 1)
+                    {
                         c=Qt::magenta;
+                    }
                     else
+                    {
 //                        if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField){
 //                            model::Ball b = field->getBallAt(i,j);
 //                            c.setRed(b.color.getColorR());
@@ -339,10 +367,18 @@ void RenderThread::drawNormalField()
 //                        }
 //                        else
                             if (path.size() > 1)
+                            {
                                 for (unsigned int k = 0; k < path.size() ; k++)
-                                    if (path[k].posX == i && path[k].posY == j){
+                                {
+                                    if (path[k].posX == i && path[k].posY == j)
+                                    {
                                         c = Qt::lightGray;
                                     }
+                                }
+                            }
+                    }
+                }
+            }
 
 
             //name the field
@@ -363,7 +399,8 @@ void RenderThread::drawNormalField()
             glVertex3f(0+i-translationX, 1+j-translationY,dist);
             glEnd();//end drawing
 
-            if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField){
+            if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+            {
 
                 model::Ball b = field->getBallAt(i,j);
                 c.setRed(b.color.getColorR());
@@ -417,12 +454,14 @@ void RenderThread::drawNormalField()
     glEnable(GL_LIGHTING);
 }
 
-void RenderThread::drawNormalFieldWithAnimation(){
+void RenderThread::drawNormalFieldWithAnimation()
+{
 
     controller::GameController* controller = glw.getGameController();
     model::GameField* field = controller->getGameField();
 
-    if (field == 0){
+    if (field == 0)
+    {
         drawIdleSequence();
         return;
     }
@@ -431,8 +470,8 @@ void RenderThread::drawNormalFieldWithAnimation(){
 
     //get path between selected and hovered field
     std::vector<model::FieldPosition> path;
-    if (hoveredField != selectedField && selectedField != -1 && hoveredField != -1){
-
+    if (hoveredField != selectedField && selectedField != -1 && hoveredField != -1)
+    {
         model::FieldPosition pos1;
         pos1.posX = selectedField%field->getDimensionX();
         pos1.posY = selectedField / field->getDimensionX();
@@ -442,7 +481,6 @@ void RenderThread::drawNormalFieldWithAnimation(){
         pos2.posY = hoveredField / field->getDimensionX();
 
         path = field->getPath(pos1,pos2);
-
     }
 
 
@@ -453,9 +491,13 @@ void RenderThread::drawNormalFieldWithAnimation(){
     GLfloat dist = -9;
 
     if (field->getDimensionX() >= field->getDimensionY())
+    {
         dist = field->getDimensionX()*(-1);
+    }
     else
+    {
         dist=field->getDimensionY()*(-1);
+    }
 
     //GLfloat dist = -9;
 
@@ -465,8 +507,10 @@ void RenderThread::drawNormalFieldWithAnimation(){
     glTranslatef(((rotationZ*dist*(-1))/90)*(-rotationX/70),(rotationX*dist)/90, (rotationX*dist)/90);
 
     //draw each field of the game
-    for (int i = 0; i< field->getDimensionX(); i++){
-        for (int j = 0; j< field->getDimensionY();j++){
+    for (int i = 0; i< field->getDimensionX(); i++)
+    {
+        for (int j = 0; j< field->getDimensionY();j++)
+        {
 
             GLfloat anima_x = 0;
             GLfloat anima_y = 0;
@@ -480,9 +524,13 @@ void RenderThread::drawNormalFieldWithAnimation(){
             //encolor the field
             QColor c;
             if ((i % 2 == 0 && j % 2 == 0) || (i %2 == 1 && j % 2 == 1) )
+            {
                 anima_color += 0.5;
+            }
             else
+            {
                 anima_color += 0.3;
+            }
 
             c.setRedF(anima_color);
             c.setGreenF(anima_color);
@@ -493,15 +541,25 @@ void RenderThread::drawNormalFieldWithAnimation(){
 
             // highlight selected and hovered field
             if(name == selectedField)
+            {
                 c = Qt::white;
+            }
             else
+            {
                 if ((name == hoveredField && path.size() > 1) || (selectedField == -1 && hoveredField == name))
+                {
                     c=Qt::lightGray;
+                }
                 else
+                {
                     if (name == hoveredField && path.size() <= 1)
+                    {
                         c=Qt::magenta;
+                    }
                     else
-//                        if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField){
+                    {
+//                        if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+//                        {
 //                            model::Ball b = field->getBallAt(i,j);
 //                            c.setRed(b.color.getColorR());
 //                            c.setGreen(b.color.getColorG());
@@ -509,11 +567,20 @@ void RenderThread::drawNormalFieldWithAnimation(){
 //                            c.setAlpha(b.color.getColorA());
 //                        }
 //                        else
+//                        {
                             if (path.size() > 1)
+                            {
                                 for (unsigned int k = 0; k < path.size() ; k++)
-                                    if (path[k].posX == i && path[k].posY == j){
+                                {
+                                    if (path[k].posX == i && path[k].posY == j)
+                                    {
                                         c = Qt::lightGray;
                                     }
+                                }
+                            }
+                    }
+                }
+            }
 
 
             //name the field
@@ -532,11 +599,14 @@ void RenderThread::drawNormalFieldWithAnimation(){
             glVertex3f(1+i-translationX, 0+j-translationY,dist);
             glVertex3f(1+i - translationX, 1+j-translationY,dist);
             glVertex3f(0+i-translationX, 1+j-translationY,dist);
-            glEnd();//end drawing
+
+            //end drawing
+            glEnd();
 
 
 
-            if ((!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField) || (anima_size != 1 && field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)){
+            if ((!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField) || (anima_size != 1 && field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField))
+            {
 
 //                GLfloat anima_z = 0;
 
@@ -559,13 +629,16 @@ void RenderThread::drawNormalFieldWithAnimation(){
 //                    acontainerGeneratedBalls.erase(acontainerGeneratedBalls.begin()+toRemove[k]);
 
 
-                if (anima_size != 1){
+                if (anima_size != 1)
+                {
                     float ball_color = 0.4;
                     c.setRedF(ball_color);
                     c.setGreenF(ball_color);
                     c.setBlueF(ball_color);
                     c.setAlphaF(1.0f);
-                }else{
+                }
+                else
+                {
                     model::Ball b = field->getBallAt(i,j);
                     c.setRed(b.color.getColorR());
                     c.setGreen(b.color.getColorG());
@@ -623,7 +696,8 @@ void RenderThread::drawNormalFieldWithAnimation(){
     glEnable(GL_LIGHTING);
 }
 
-void RenderThread::drawIdleSequence(){
+void RenderThread::drawIdleSequence()
+{
 
     //begin actual drawing of the element
 
@@ -697,12 +771,10 @@ void RenderThread::drawIdleSequence(){
     glRotatef((-1)*360*(float)ms/3000, 0.0, 0.0, 1.0);
     glTranslatef(-3.5,-2,6);
 
-
-
-
 }
 
-void RenderThread::drawInitialAnimation(){
+void RenderThread::drawInitialAnimation()
+{
 
     controller::GameController* controller = glw.getGameController();
     model::GameField* field = controller->getGameField();
@@ -711,7 +783,8 @@ void RenderThread::drawInitialAnimation(){
     clock_gettime(1, &now);
     long ms = timeOperator->getTimeDifference(timestampAnimation, now);
 
-    if (ms > 3000){
+    if (ms > 3000)
+    {
         initialAnimation = false;
 
         model::AnimationContainer container;
@@ -728,18 +801,25 @@ void RenderThread::drawInitialAnimation(){
     float dist = -9;
 
     if (field->getDimensionX() >= field->getDimensionY())
+    {
         dist = field->getDimensionX()*(-1);
+    }
     else
+    {
         dist=field->getDimensionY()*(-1);
+    }
 
     int count = 0;
     //draw each field of the game
-    for (int i = 0; i< field->getDimensionX(); i++){
-        for (int j = 0; j< field->getDimensionY();j++){
+    for (int i = 0; i< field->getDimensionX(); i++)
+    {
+        for (int j = 0; j< field->getDimensionY();j++)
+        {
 
             //encolor the field
             QColor c;
-            if ((i % 2 == 0 && j % 2 == 0) || (i %2 == 1 && j % 2 == 1) ){
+            if ((i % 2 == 0 && j % 2 == 0) || (i %2 == 1 && j % 2 == 1) )
+            {
                 c.setRedF(0.5f);
                 c.setGreenF(0.5f);
                 c.setBlueF(0.5f);
@@ -753,7 +833,8 @@ void RenderThread::drawInitialAnimation(){
 
             int name = j*field->getDimensionX()+i;
 
-            if (i+j < (float)ms/1000 * (float)(field->getDimensionX()+field->getDimensionY())/2){
+            if (i+j < (float)ms/1000 * (float)(field->getDimensionX()+field->getDimensionY())/2)
+            {
 
                 count ++;
                 //name the field
@@ -780,7 +861,9 @@ void RenderThread::drawInitialAnimation(){
                 glVertex3f(0.5, -0.5,0);
                 glVertex3f(0.5, 0.5,0);
                 glVertex3f(-0.5, 0.5,0);
-                glEnd();//end drawing
+
+                //end drawing
+                glEnd();
 
                 glRotatef(angle-90,1.0,-1.0,0);
                 glTranslatef(-i-0.5+translationX,-j-0.5+translationY, -dist);
@@ -806,7 +889,8 @@ void RenderThread::drawInitialAnimation(){
 
 }
 
-void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int j, float dist, float *out_x, float *out_y, float *out_z, float *out_color, float *out_size){
+void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int j, float dist, float *out_x, float *out_y, float *out_z, float *out_color, float *out_size)
+{
     timespec now;
     clock_gettime(1, &now);
 
@@ -823,112 +907,161 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
 
     //check for new balls
     for(unsigned int k = 0; k< acontainerGeneratedBalls.size(); k++)
+    {
         for (unsigned int l = 0; l< acontainerGeneratedBalls[k].objects.size(); l++)
-            if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField){
-                if (acontainerGeneratedBalls[k].objects[l].posX == i && acontainerGeneratedBalls[k].objects[l].posY == j){
+        {
+            if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+            {
+                if (acontainerGeneratedBalls[k].objects[l].posX == i && acontainerGeneratedBalls[k].objects[l].posY == j)
+                {
                     long ms = timeOperator->getTimeDifference(acontainerGeneratedBalls[k].timestamp, now);
 
-                    if (ms < 2000){
+                    if (ms < 2000)
+                    {
                         *out_z = quadraticNewBallFunction(dist,ms);
                         *out_color = quadraticColorFunction(ms);
-                    }else{
+                    }
+                    else
+                    {
                         toRemoveG.push_back(k);
                         break;
                     }
                 }
             }
+        }
+    }
 
 
     //check deleted balls
     for(unsigned int k = 0; k< acontainerRemovedBalls.size(); k++)
+    {
         for (unsigned int l = 0; l< acontainerRemovedBalls[k].objects.size(); l++)
-            if (field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField){
-                if (acontainerRemovedBalls[k].objects[l].posX == i && acontainerRemovedBalls[k].objects[l].posY == j){
+        {
+            if (field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+            {
+                if (acontainerRemovedBalls[k].objects[l].posX == i && acontainerRemovedBalls[k].objects[l].posY == j)
+                {
                     long ms = timeOperator->getTimeDifference(acontainerRemovedBalls[k].timestamp, now);
 
-                    if (ms < 1000){
+                    if (ms < 1000)
+                    {
                         *out_size = 1- (float)ms/1000;
-                    }else{
+                    }
+                    else
+                    {
                         toRemoveR.push_back(k);
                         break;
                     }
                 }
             }
+        }
+    }
 
     //check moved balls
     for(unsigned int k = 0; k< acontainerMovedBalls.size(); k++)
-            if (/*!field->getBallAt(i,j).isNull &&*/ !field->getBallAt(i,j).outOfField){
-                if (acontainerMovedBalls[k].objects.back().posX == i && acontainerMovedBalls[k].objects.back().posY == j){
+    {
+            if (!field->getBallAt(i,j).outOfField)
+            {
+                if (acontainerMovedBalls[k].objects.back().posX == i && acontainerMovedBalls[k].objects.back().posY == j)
+                {
                     long ms = timeOperator->getTimeDifference(acontainerMovedBalls[k].timestamp, now);
 
 //                  Calculate the current position during movement
-                    if (ms < ((long)acontainerMovedBalls[k].objects.size()-1)*50){
+                    if (ms < ((long)acontainerMovedBalls[k].objects.size()-1)*50)
+                    {
 //                        *out_x = -4 + (float)ms*4/2000;//todo check
                            movementPositionFunction(ms, acontainerMovedBalls[k].objects, out_x, out_y);
-                    }else{
+                    }
+                    else
+                    {
                         toRemoveM.push_back(k);
                         break;
                     }
                 }
             }
+    }
 
     for (unsigned int k = 0; k < toRemoveG.size();k++)
+    {
             acontainerGeneratedBalls.erase(acontainerGeneratedBalls.begin()+toRemoveG[k]);
+    }
 
     for (unsigned int k = 0; k < toRemoveR.size();k++)
+    {
             acontainerRemovedBalls.erase(acontainerRemovedBalls.begin()+toRemoveR[k]);
+    }
 
     for (unsigned int k = 0; k < toRemoveM.size();k++)
+    {
             acontainerMovedBalls.erase(acontainerMovedBalls.begin()+toRemoveM[k]);
+    }
 
 }
 
-float RenderThread::quadraticNewBallFunction(float d, long t_millisec){
+float RenderThread::quadraticNewBallFunction(float d, long t_millisec)
+{
 
     float t = (float)t_millisec/1000;
-    d= -d;
+    d = -d;
     float a = pow((2+sqrt(2)),2)*d/4;
 
-    if (t >= 0 && t <= (2 - sqrt(2)) ){
+    if (t >= 0 && t <= (2 - sqrt(2)))
+    {
         float ret = -a*(pow(t,2))+d;
         return ret;
-
-    }else
-        if(t > (2 - sqrt(2)) && t < sqrt(2)){
+    }
+    else
+    {
+        if (t > (2 - sqrt(2)) && t < sqrt(2))
+        {
             float ret = -a*(pow((t-1),2))+d/2;
             return ret;
-        }else
-            if( t > sqrt(2) && t <= 2){
+        }
+        else
+        {
+            if (t > sqrt(2) && t <= 2)
+            {
                 float ret =-a*(pow((t-1-1/sqrt(2)),2))+d/4;
                 return ret;
             }
+        }
+    }
 
     return 0;
 }
 
-float RenderThread::quadraticColorFunction(long t_millisec){
+float RenderThread::quadraticColorFunction(long t_millisec)
+{
     if (t_millisec <= 0 || t_millisec >= 1000)
+    {
         return 0;
-    else{
+    }
+    else
+    {
         float t = (float)t_millisec/1000;
 
         float ret = -2*(pow(t-0.5,2))+0.5;
 
         if (ret > 0.5 || ret < 0)
+        {
             ret = 0;
+        }
 
         return ret;
     }
 }
 
-void RenderThread::movementPositionFunction(long t_millisec, std::vector<model::FieldPosition> path, float *out_x, float *out_y){
+void RenderThread::movementPositionFunction(long t_millisec, std::vector<model::FieldPosition> path, float *out_x, float *out_y)
+{
 
     unsigned int current = (int) (float)t_millisec/50;//get current processed path piece
 
     float t = (float)t_millisec/50 - (float)current;
 
     if(path.size() <= current+1)
+    {
         return;
+    }
 
     float x = (1-t)*((float) path[current].posX) + t*((float) path[current+1].posX);
     float y = (1-t)*((float) path[current].posY) + t*((float) path[current+1].posY);
@@ -948,7 +1081,6 @@ void RenderThread::hoverField(const QPoint &pos)
 {
     hoveredPoint = pos;
 }
-
 
 int RenderThread::faceAtPosition(const QPoint &pos)
 {
@@ -1006,19 +1138,30 @@ int RenderThread::faceAtPosition(const QPoint &pos)
     return buffer[3];
 }
 
-void RenderThread::setRotation( GLfloat _x, GLfloat _y, GLfloat _z )
+void RenderThread::setRotation(GLfloat x, GLfloat y, GLfloat z)
 {
     if (initialAnimation)
+    {
+        //do not set any rotation when initial sequence is displayed
         return;
+    }
 
-    if (rotationX +_x >= -70 && rotationX +_x <= 0) //only x and z are used currently
-        rotationX += _x;
+    //only x and z are used currently
 
-    if (rotationY +_y >= -70 && rotationY +_y <= 0)
-        rotationY += _y;
+    if (rotationX +x >= -70 && rotationX +x <= 0)
+    {
+        rotationX += x;
+    }
 
-    if (rotationZ +_z > -45 && rotationZ +_z < 45)
-        rotationZ += _z;
+    if (rotationY + y >= -70 && rotationY + y <= 0)
+    {
+        rotationY += y;
+    }
+
+    if (rotationZ + z > -45 && rotationZ + z < 45)
+    {
+        rotationZ +=  z;
+    }
 }
 
 void RenderThread::setSelectedField(int face)
@@ -1026,12 +1169,21 @@ void RenderThread::setSelectedField(int face)
 
     controller::GameController* controller = glw.getGameController();
 
-    if (controller == 0)
-        return ;
+    if (controller == nullptr)
+    {
+        //no controller is present, return
+        return;
+    }
     else
-        if (controller->getGameField() == 0 || !controller->areOptionsSet())
-            return ;
+    {
+        if (controller->getGameField() == nullptr || !controller->areOptionsSet())
+        {
+            //no game field is present or no options are set, return
+            return;
+        }
+    }
 
+    //get the game field for further handling
     model::GameField* field = controller->getGameField();
 
     if(selectedField == face)
@@ -1053,9 +1205,13 @@ void RenderThread::setSelectedField(int face)
             std::vector<model::FieldPosition> path = controller->moveBall(pos1,pos2);
 
             if (controller->isGameOver())
+            {
+                //controller says the game is over so do game over sequence
                 glw.gameOver();
+            }
 
-            if (path.size() > 1){
+            if (path.size() > 1)
+            {
                 selectedField = -1;
 
                 model::AnimationContainer container3;
@@ -1074,14 +1230,23 @@ void RenderThread::setSelectedField(int face)
                 acontainerRemovedBalls.push_back(container2);
 
 
-            }else
+            }
+            else
+            {
                 if (!field->getBallAt(pos2).isNull && !field->getBallAt(pos2).outOfField )
+                {
                     selectedField = face;
+                }
+            }
 
         }
         else
+        {
             if (!field->getBallAt(face%field->getDimensionX(), face / field->getDimensionX()).isNull && !field->getBallAt(face%field->getDimensionX(), face / field->getDimensionX()).outOfField )
+            {
                 selectedField = face;
+            }
+        }
     }
 
 }
