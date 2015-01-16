@@ -2,7 +2,8 @@
 
 using namespace model;
 
-std::string FieldPosition::toString() const{
+std::string FieldPosition::toString() const
+{
 
     std::ostringstream ret;
     ret << "("<<posX << "," << posY << ")";

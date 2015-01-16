@@ -167,14 +167,13 @@ bool GameController::checkLines(model::FieldPosition pos){
         {
             if (!neighbours[i].isNull && !neighbours[i].outOfField && neighbours[i].color == neighbours[model::GameField::Middle].color)
             {
-
-                model::FieldPosition npos = model::GameField::getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(i));
+                model::FieldPosition npos = theField->getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(i));
                 counters.at(i)++;
 
                 while (!theField->getNeighbourAt(npos,static_cast<model::GameField::Neighbour>(i)).isNull && !theField->getNeighbourAt(npos,static_cast<model::GameField::Neighbour>(i)).outOfField && theField->getNeighbourAt(npos,static_cast<model::GameField::Neighbour>(i)).color == theField->getNeighbourAt(pos,static_cast<model::GameField::Neighbour>(i)).color)
                 {
                     counters[i]++;
-                    npos = model::GameField::getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(i));
+                    npos = theField->getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(i));
                 }
             }
         }
@@ -191,7 +190,7 @@ bool GameController::checkLines(model::FieldPosition pos){
             anyLineExistent = true;
 
             //remove balls
-            model::FieldPosition npos = model::GameField::getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(i));
+            model::FieldPosition npos = theField->getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(i));
             for (int j = 1; j<= counters[i];j++)
             {
                 model::Ball b = theField->removeBallAt(npos);
@@ -206,10 +205,10 @@ bool GameController::checkLines(model::FieldPosition pos){
                     actionController->addAction(action);
                 }
 
-                npos = model::GameField::getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(i));
+                npos = theField->getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(i));
             }
 
-            npos = model::GameField::getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(model::GameField::BottomRight-i));
+            npos = theField->getPositionOfNeighbour(pos, static_cast<model::GameField::Neighbour>(model::GameField::BottomRight-i));
             for (int j = 1; j<= counters[model::GameField::BottomRight-i];j++)
             {
                 model::Ball b = theField->removeBallAt(npos);
@@ -224,7 +223,7 @@ bool GameController::checkLines(model::FieldPosition pos){
                     actionController->addAction(action);
                 }
 
-                npos = model::GameField::getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(model::GameField::BottomRight-i));
+                npos = theField->getPositionOfNeighbour(npos, static_cast<model::GameField::Neighbour>(model::GameField::BottomRight-i));
             }
         }
     }

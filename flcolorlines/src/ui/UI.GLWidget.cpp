@@ -60,6 +60,10 @@ GLWidget::GLWidget(QWidget *parent)
     setMouseTracking(true);
 }
 
+GLWidget::~GLWidget()
+{
+}
+
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {

@@ -54,7 +54,7 @@ int HighscoreController::addEntry(int score, std::string name, std::string field
     sort(entries.begin(),entries.end(), std::greater<model::HighscoreEntry>());
 
     int i;
-    for(i = 0; i< entries.size();i++)
+    for(i = 0; i < entries.size();i++)
     {
         if (entries[i].timestamp == entry.timestamp && entries[i].score == entry.score)
         {

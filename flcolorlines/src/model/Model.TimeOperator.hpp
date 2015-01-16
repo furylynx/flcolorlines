@@ -11,24 +11,62 @@
 namespace model
 {
 
-class TimeOperator{
+class TimeOperator
+{
 
 public:
 
+    /**
+     * Creates a new time operator.
+     *
+     * @param precision The precision of the time operator.
+     */
     TimeOperator(int precision = 1000000);
-    ~TimeOperator();
+    virtual ~TimeOperator();
 
-    long getTimeSinceBegin();
-    long getTimeSinceMark();
-    long getTimeDifference(timespec timeA, timespec timeB);
+    /**
+     * Returns the time passed since the begin marker.
+     *
+     * @return The time passed.
+     */
+    virtual long getTimeSinceBegin();
 
-    void setMark();
+    /**
+     * Returns the time passed since the set marker.
+     *
+     * @return The time passed.
+     */
+    virtual long getTimeSinceMark();
+
+    /**
+     * Returns the time difference between the two timestamps.
+     *
+     * @param timeA The first timestamp.
+     * @param timeB The second timestamp.
+     * @return The passed time.
+     */
+    virtual long getTimeDifference(timespec timeA, timespec timeB);
+
+    /**
+     * Sets the time marker at the current time.
+     */
+    virtual void setMark();
 
 
 private:
+    /**
+     * The begin time marker.
+     */
     timespec beginTimestamp;
+
+    /**
+     * The set time marker.
+     */
     timespec markTimestamp;
 
+    /**
+     * The precision to be applied.
+     */
     int precision;
 
 };

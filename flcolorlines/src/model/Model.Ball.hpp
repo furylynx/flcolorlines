@@ -16,11 +16,27 @@ namespace model
 
 struct Ball
 {
-        Color color;
-        bool isNull; // = false;
-        bool outOfField; // = false;
+    /**
+     * The color of the ball.
+     */
+    Color color;
 
-        std::string toString() const;
+    /**
+     * The flag for an invalid ball. Per default to be set to false.
+     */
+    bool isNull;
+
+    /**
+     * The flag for an out of the field ball. Per default to be set to false.
+     */
+    bool outOfField;
+
+    /**
+     * Returns the string representation of the object.
+     *
+     * @return The string representation.
+     */
+    std::string toString() const;
 };
 
 }//namespace model

@@ -59,76 +59,171 @@ class MainWindow;
 class GLWidget : public QGLWidget
 {
 public:
-    GLWidget(QWidget *parent = 0);
-    /** Starts the rendering thread.
-     * This method is called in the contructor.
+    /**
+     * Creates a new widget.
+     *
+     * @param parent The parent if any.
+     */
+    GLWidget(QWidget *parent = nullptr);
+
+    virtual ~GLWidget();
+
+    /**
+     * Starts the rendering thread. This method is called in the contructor.
      */
     void initRendering();
-    /** Stops the rendering thread of the widget. */
+
+    /**
+     * Stops the rendering thread of the widget.
+     */
     void finishRendering();
-    /** Call this method before doing any OpenGL rendering from a thread.
+
+    /**
+     * Call this method before doing any OpenGL rendering from a thread.
      * This method will aquire the GL rendering context for the calling thread.
      * Rendering will only be possible from this thread until unlockGLContext()
      * is called from the same thread.
      */
     void lockGLContext();
-    /** Call this method to release the rendering context again after calling lockGLContext().
+
+    /**
+     * Call this method to release the rendering context again after calling lockGLContext().
      */
     void unlockGLContext();
-    /** Returns a reference to the render wait condition.
+
+    /**
+     * Returns a reference to the render wait condition.
      * This is only for internal purpose (render thread communication)
      */
     QWaitCondition& renderCondition();
-    /** Returns a reference to the render context mutex.
+
+    /**
+     * Returns a reference to the render context mutex.
      * This is only for internal purpose (render thread communication)
      */
     QMutex& renderMutex();
 
+    /**
+     * Returns the game controller.
+     *
+     * @return The game controller.
+     */
     controller::GameController* getGameController();
+
+    /**
+     * Sets the game controller.
+     *
+     * @param ctrl The game controller.
+     */
     void setGameController(controller::GameController *ctrl);
 
+    /**
+     * Sets the main window.
+     *
+     * @param mw The main window.
+     */
     void setMainWindow(MainWindow *mw);
 
-    void startNewGame(int dimx, int dimy, int amount_colors, int amount_newballs, int amount_line);
+    /**
+     * Starts a new game.
+     *
+     * @param dimx The x-dimension.
+     * @param dimy The y-dimension.
+     * @param amountColors The number of colors.
+     * @param amountNewBalls The number of new ball on each turn.
+     * @param amountLine The number of balls in a line required to fill it.
+     */
+    void startNewGame(int dimx, int dimy, int amountColors, int amountNewBalls, int amountLine);
+
+    /**
+     * Undoes the last action.
+     *
+     * @return True if further undo possible.
+     */
     bool undoAction();
+
+    /**
+     * Redoes the last action.
+     *
+     * @return True if further redo possible.
+     */
     bool redoAction();
 
+    /**
+     * Initializes the game over part.
+     */
     void gameOver();
 
 public slots:
-    /** Cause the rendering thread to render one frame of the OpenGL scene.
-     * This method is thread save.
+    /**
+     * Cause the rendering thread to render one frame of the OpenGL scene. This method is thread save.
+     *
      * \warning If the rendering thread is currently rendering (not idle) when this method is called
      * NO additional new frame will be rendered afterwards!
      */
     void render();
 
 protected:
-    /** Handles mouse press events on the QGLWidget. */
+    /**
+     * Handles mouse press events on the QGLWidget.
+     */
     void mousePressEvent(QMouseEvent *event);
-    /** Handles mouse move events on the QGLWidget. */
+
+    /**
+     * Handles mouse move events on the QGLWidget.
+     */
     void mouseMoveEvent(QMouseEvent *event);
-    /** Handles mouse double click events on the QGLWidget. */
+
+    /**
+     * Handles mouse double click events on the QGLWidget.
+     */
     void mouseDoubleClickEvent(QMouseEvent *event);
-    /** Performs a save shutdown if the widget recieves a close event. */
+
+    /**
+     * Performs a save shutdown if the widget recieves a close event.
+     */
     void closeEvent(QCloseEvent* _e);
-    /** Calls render() if the widget recieves a paint event. */
+
+    /**
+     * Calls render() if the widget recieves a paint event.
+     */
     void paintEvent(QPaintEvent*);
-    /** Requests a GL viewport resize from the rendering thread. */
+
+    /**
+     * Requests a GL viewport resize from the rendering thread.
+     */
     void resizeEvent(QResizeEvent* _e);
 
 private:
-    /** The rendering thread. */
+    /**
+     * The rendering thread.
+     */
     controller::RenderThread glt;
-    /** Mutex for protecting the GL rendering context for multithreading. */
+
+    /**
+     * Mutex for protecting the GL rendering context for multithreading.
+     */
     QMutex render_mutex;
-    /** The rendering thread uses this wait condition to save CPU ressources. */
+
+    /**
+     * The rendering thread uses this wait condition to save CPU ressources.
+     */
     QWaitCondition render_condition;
 
-    // for the example implementation
+    /**
+     * The last position.
+     */
     QPoint lastPos;
 
+
+    /**
+     * A pointer to the game controller.
+     */
     controller::GameController *gcontroller;
+
+    /**
+     * A pointer to the main window.
+     */
     MainWindow *mainwindow;
 };
 

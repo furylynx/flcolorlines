@@ -26,22 +26,61 @@ class OptionsFrame : public QFrame
     Q_OBJECT
     
 public:
-    explicit OptionsFrame(QWidget *parent = 0);
-    ~OptionsFrame();
+    /**
+     * Creates the options frame
+     *
+     * @param parent The parent if any.
+     */
+    explicit OptionsFrame(QWidget *parent = nullptr);
+    virtual ~OptionsFrame();
 
-    void setMainWindow(MainWindow *mw);
+    /**
+     * Sets the main window.
+     *
+     * @param mw The main window.
+     */
+    virtual void setMainWindow(MainWindow *mw);
     
 protected:
-    void closeEvent(QCloseEvent *evt);
+
+    /**
+     * Handles the close event.
+     *
+     * @param evt The event args.
+     */
+    virtual void closeEvent(QCloseEvent *evt);
 
 private:
+    /**
+     * The ui options frame.
+     */
     Ui::OptionsFrame *ui;
-    void reset();
+
+    /**
+     * A pointer to the main window.
+     */
     MainWindow *mainWindow;
 
+    /**
+     * Resets the options.
+     */
+    void reset();
+
 private slots:
+
+    /**
+     * Handles the cancel event.
+     */
     void clickedCancel();
+
+    /**
+     * Handles the new game event.
+     */
     void clickedNewGame();
+
+    /**
+     * Handles the changed value event.
+     */
     void changedValue();
 };
 

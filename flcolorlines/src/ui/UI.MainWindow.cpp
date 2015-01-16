@@ -51,37 +51,48 @@ void MainWindow::closeEvent(QCloseEvent *evt)
 {
     GLFrame.finishRendering();    // stop the thread before exiting
 
-    if (hictrl != 0)
+    if (hictrl != nullptr)
+    {
         hictrl->writeToFile();
+    }
 
     QMainWindow::closeEvent(evt);
 }
 
-controller::GameController* MainWindow::getGameController(){
+controller::GameController* MainWindow::getGameController() const
+{
     return controller;
 }
 
 
-void MainWindow::setGameController(controller::GameController *ctrl){
+void MainWindow::setGameController(controller::GameController *ctrl)
+{
     controller = ctrl;
     GLFrame.setGameController(ctrl);
 }
 
-void MainWindow::setHighscoreController(controller::HighscoreController *c){
+void MainWindow::setHighscoreController(controller::HighscoreController *c)
+{
     hictrl = c;
 
-    if (highscoreFrame != 0)
+    if (highscoreFrame != nullptr)
+    {
         highscoreFrame->setHighscoreController(c);
+    }
 }
 
-void MainWindow::startNewGame(int dimx, int dimy, int amount_colors, int amount_newballs, int amount_line){
+void MainWindow::startNewGame(int dimx, int dimy, int amount_colors, int amount_newballs, int amount_line)
+{
     GLFrame.startNewGame(dimx,dimy,amount_colors,amount_newballs, amount_line);
 }
 
-void MainWindow::gameOver(){
+void MainWindow::gameOver()
+{
 
-    if (controller == 0 || hictrl == 0)
+    if (controller == nullptr || hictrl == nullptr)
+    {
         return;
+    }
 
     int score = controller->getTheScore();
 
@@ -96,39 +107,49 @@ void MainWindow::gameOver(){
     std::string field(ostream.str());
 
     if (ok && !text.isEmpty())
+    {
        hictrl->addEntry(score, text.toStdString(), field);
+    }
 
 }
 
 //slots
-void MainWindow::clickedUndo(){
+void MainWindow::clickedUndo()
+{
     GLFrame.undoAction();
 }
 
-void MainWindow::clickedRedo(){
+void MainWindow::clickedRedo()
+{
     GLFrame.redoAction();
 }
 
 
-void MainWindow::clickedExit(){
+void MainWindow::clickedExit()
+{
     this->close();
 }
 
-void MainWindow::clickedAbout(){
+void MainWindow::clickedAbout()
+{
 
 }
 
-void MainWindow::clickedNewGame(){
+void MainWindow::clickedNewGame()
+{
     optionsFrame->show();
 }
 
-void MainWindow::aboutToShowActions(){
-    if (controller != 0){
+void MainWindow::aboutToShowActions()
+{
+    if (controller != nullptr)
+    {
         ui->actionUndo->setEnabled(controller->undoPossible());
         ui->actionRedo->setEnabled(controller->redoPossible());
     }
 }
 
-void MainWindow::clickedHighscore(){
+void MainWindow::clickedHighscore()
+{
     highscoreFrame->show();
 }

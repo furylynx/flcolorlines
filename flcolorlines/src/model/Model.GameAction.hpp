@@ -12,8 +12,19 @@ namespace model
 
 struct GameAction
 {
+    /**
+     * The type of the action.
+     */
     enum ActionType{ADDBALL,REMOVEBALL,INCREMENTSCORE,NEWTURN,NONE} type;
-    unsigned int value;//color if add or remove ball, points if score incremented
+
+    /**
+     * The value can be a color if the action is ADDBALL or REMOVEBALL. If INCREMENTSCORE the value is the score.
+     */
+    unsigned int value;
+
+    /**
+     * The field position.
+     */
     model::FieldPosition pos;
 
 };

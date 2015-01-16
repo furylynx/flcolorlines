@@ -14,8 +14,14 @@ namespace model
 
 struct AnimationContainer
 {
-
+    /**
+     * The field position objects.
+     */
     std::vector<model::FieldPosition> objects;
+
+    /**
+     * The beginning timestamp.
+     */
     timespec timestamp;
 
 };

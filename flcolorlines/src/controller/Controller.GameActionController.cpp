@@ -2,30 +2,37 @@
 
 using namespace controller;
 
-GameActionController::GameActionController(){
+GameActionController::GameActionController()
+{
 }
 
-GameActionController::~GameActionController(){
+GameActionController::~GameActionController()
+{
 
 }
 
-void GameActionController::setOptions(model::GameField* field){
+void GameActionController::setOptions(model::GameField* field)
+{
     theField = field;
 }
 
-void GameActionController::clear(){
+void GameActionController::clear()
+{
     actions.clear();
     redoActions.clear();
 }
 
-void GameActionController::addAction(model::GameAction action){
+void GameActionController::addAction(model::GameAction action)
+{
     actions.push_back(action);
     redoActions.clear();
 }
 
-model::GameAction GameActionController::undoLastAction(){
+model::GameAction GameActionController::undoLastAction()
+{
 
-    if (!undoPossible()){
+    if (!undoPossible())
+    {
         model::GameAction action;
         action.type = model::GameAction::NONE;
         return action;
@@ -35,9 +42,12 @@ model::GameAction GameActionController::undoLastAction(){
     actions.pop_back();
 
     if (lastAction.type == model::GameAction::ADDBALL)
+    {
         theField->removeBallAt(lastAction.pos);
+    }
 
-    if (lastAction.type == model::GameAction::REMOVEBALL){
+    if (lastAction.type == model::GameAction::REMOVEBALL)
+    {
         model::Ball ball;
         ball.isNull = false;
         ball.color.color = lastAction.value;
@@ -51,18 +61,22 @@ model::GameAction GameActionController::undoLastAction(){
     return lastAction;
 }
 
-int GameActionController::undoLastTurn(){
+int GameActionController::undoLastTurn()
+{
 
     model::GameAction lastAction = undoLastAction();
 
     if (lastAction.type == model::GameAction::NEWTURN || lastAction.type == model::GameAction::NONE)
+    {
         return 0;
+    }
 
     int scorecount = 0;
 
     while( lastAction.type != model::GameAction::NEWTURN && lastAction.type != model::GameAction::NONE)
     {
-        if (lastAction.type == model::GameAction::INCREMENTSCORE){
+        if (lastAction.type == model::GameAction::INCREMENTSCORE)
+        {
             scorecount += (int)lastAction.value;
         }
 
@@ -73,37 +87,46 @@ int GameActionController::undoLastTurn(){
 }
 
 
-bool GameActionController::undoPossible() const{
+bool GameActionController::undoPossible() const
+{
 
     bool undoPossibleB = false;
 
-    for (int i = 0; i < actions.size(); i++)
-        if (actions[i].type == model::GameAction::NEWTURN)
+    for (std::size_t i = 0; i < actions.size(); i++)
+    {
+        if (actions.at(i).type == model::GameAction::NEWTURN)
+        {
             undoPossibleB = true;
+        }
+    }
 
     return undoPossibleB;
 
 }
 
-model::GameAction GameActionController::redoLastAction(){
+model::GameAction GameActionController::redoLastAction()
+{
 
-    if (!redoPossible()){
+    if (!redoPossible())
+    {
         model::GameAction action;
         action.type = model::GameAction::NONE;
         return action;
     }
 
-    model::GameAction lastAction = redoActions[redoActions.size()-1];
+    model::GameAction lastAction = redoActions.at(redoActions.size()-1);
     redoActions.pop_back();
 
-    if (lastAction.type == model::GameAction::ADDBALL){
+    if (lastAction.type == model::GameAction::ADDBALL)
+    {
         model::Ball ball;
         ball.isNull = false;
         ball.color.color = lastAction.value;
         theField->setBallAt(lastAction.pos, ball);
     }
 
-    if (lastAction.type == model::GameAction::REMOVEBALL){
+    if (lastAction.type == model::GameAction::REMOVEBALL)
+    {
         theField->removeBallAt(lastAction.pos);
     }
 
@@ -114,22 +137,27 @@ model::GameAction GameActionController::redoLastAction(){
     return lastAction;
 }
 
-int GameActionController::redoLastTurn(){
+int GameActionController::redoLastTurn()
+{
 
     model::GameAction lastAction;
 
-    for (int i = 0; i<2; i++){
+    for (int i = 0; i<2; i++)
+    {
         lastAction = redoLastAction();
 
         if (lastAction.type == model::GameAction::NONE)
+        {
             return 0;
+        }
     }
 
     int scorecount = 0;
 
     while( lastAction.type != model::GameAction::NEWTURN && lastAction.type != model::GameAction::NONE)
     {
-        if (lastAction.type == model::GameAction::INCREMENTSCORE){
+        if (lastAction.type == model::GameAction::INCREMENTSCORE)
+        {
             scorecount += (int)lastAction.value;
         }
 
@@ -141,7 +169,8 @@ int GameActionController::redoLastTurn(){
     return scorecount;
 }
 
-bool GameActionController::redoPossible() const{
+bool GameActionController::redoPossible() const
+{
 
-    return (redoActions.size() > 0);
+    return (!redoActions.empty());
 }
