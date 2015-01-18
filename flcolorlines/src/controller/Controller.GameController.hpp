@@ -36,8 +36,9 @@ public:
     virtual void setOptions(int dimx, int dimy, int amountColors, int amountNewBalls, int amountLine);
 
     /**
-     * @brief areOptionsSet
-     * @return
+     * Returns true if the options are set.
+     *
+     * @return True if set.
      */
     virtual bool areOptionsSet();
 

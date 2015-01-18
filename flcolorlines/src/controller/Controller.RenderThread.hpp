@@ -75,12 +75,14 @@ class RenderThread : public QThread
 public:
     /**
      * Init an OpenGl render thread for the _glwidget QGL
+     *
+     * @param _glw The gl widget to be handled.
      */
     RenderThread(ui::GLWidget & _glw);
 
 
     /**
-     * main() function of the thread.
+     * The run method of the thread. Contains the thread loop.
      */
     virtual void run();
 
