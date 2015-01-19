@@ -150,15 +150,15 @@ public:
     /**
      * Calculates the animation translation.
      *
-     * @param field
+     * @param field The game field.
      * @param i
      * @param j
      * @param dist
-     * @param out_x
-     * @param out_y
-     * @param out_z
-     * @param our_color
-     * @param out_size
+     * @param out_x The resulting x-position.
+     * @param out_y The resulting y-position.
+     * @param out_z The resulting z-position.
+     * @param our_color The resulting color.
+     * @param out_size The resulting size.
      */
     virtual void calcAnimationTranslation(model::GameField *field, int i, int j, float dist, float *out_x, float *out_y, float *out_z, float *our_color, float *out_size);
 

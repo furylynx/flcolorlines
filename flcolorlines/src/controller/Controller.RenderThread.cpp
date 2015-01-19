@@ -97,6 +97,9 @@ void RenderThread::run( )
     while( render_flag )
     {
 
+        //std::cout << acontainerGeneratedBalls.size() << " | " << acontainerMovedBalls.size() << " | " << acontainerRemovedBalls.size() << std::endl;
+        //std::cout << selectedFieldsQueue.size() << std::endl;
+
         // resize the GL viewport if requested
         if (resize_flag)
         {
@@ -150,7 +153,6 @@ void RenderThread::run( )
     // unlock the render mutex before exit
     glw.unlockGLContext();
 
-    std::cout << "thread ended..." << std::endl;
 }
 
 void RenderThread::initializeGL()
@@ -908,23 +910,30 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
     //check for new balls
     for(unsigned int k = 0; k< acontainerGeneratedBalls.size(); k++)
     {
-        for (unsigned int l = 0; l< acontainerGeneratedBalls[k].objects.size(); l++)
+        if (acontainerGeneratedBalls.at(k).objects.size() == 0 )
         {
-            if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+            toRemoveG.push_back(k);
+        }
+        else
+        {
+            for (unsigned int l = 0; l< acontainerGeneratedBalls[k].objects.size(); l++)
             {
-                if (acontainerGeneratedBalls[k].objects[l].posX == i && acontainerGeneratedBalls[k].objects[l].posY == j)
+                if (!field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
                 {
-                    long ms = timeOperator->getTimeDifference(acontainerGeneratedBalls[k].timestamp, now);
+                    if (acontainerGeneratedBalls[k].objects[l].posX == i && acontainerGeneratedBalls[k].objects[l].posY == j)
+                    {
+                        long ms = timeOperator->getTimeDifference(acontainerGeneratedBalls[k].timestamp, now);
 
-                    if (ms < 2000)
-                    {
-                        *out_z = quadraticNewBallFunction(dist,ms);
-                        *out_color = quadraticColorFunction(ms);
-                    }
-                    else
-                    {
-                        toRemoveG.push_back(k);
-                        break;
+                        if (ms < 2000)
+                        {
+                            *out_z = quadraticNewBallFunction(dist,ms);
+                            *out_color = quadraticColorFunction(ms);
+                        }
+                        else
+                        {
+                            toRemoveG.push_back(k);
+                            break;
+                        }
                     }
                 }
             }
@@ -935,22 +944,29 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
     //check deleted balls
     for(unsigned int k = 0; k< acontainerRemovedBalls.size(); k++)
     {
-        for (unsigned int l = 0; l< acontainerRemovedBalls[k].objects.size(); l++)
+        if (acontainerRemovedBalls.at(k).objects.size() == 0 )
         {
-            if (field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
+            toRemoveR.push_back(k);
+        }
+        else
+        {
+            for (unsigned int l = 0; l< acontainerRemovedBalls[k].objects.size(); l++)
             {
-                if (acontainerRemovedBalls[k].objects[l].posX == i && acontainerRemovedBalls[k].objects[l].posY == j)
+                if (field->getBallAt(i,j).isNull && !field->getBallAt(i,j).outOfField)
                 {
-                    long ms = timeOperator->getTimeDifference(acontainerRemovedBalls[k].timestamp, now);
+                    if (acontainerRemovedBalls[k].objects[l].posX == i && acontainerRemovedBalls[k].objects[l].posY == j)
+                    {
+                        long ms = timeOperator->getTimeDifference(acontainerRemovedBalls[k].timestamp, now);
 
-                    if (ms < 1000)
-                    {
-                        *out_size = 1- (float)ms/1000;
-                    }
-                    else
-                    {
-                        toRemoveR.push_back(k);
-                        break;
+                        if (ms < 1000)
+                        {
+                            *out_size = 1- (float)ms/1000;
+                        }
+                        else
+                        {
+                            toRemoveR.push_back(k);
+                            break;
+                        }
                     }
                 }
             }
@@ -960,6 +976,12 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
     //check moved balls
     for(unsigned int k = 0; k< acontainerMovedBalls.size(); k++)
     {
+        if (acontainerMovedBalls.at(k).objects.size() == 0 )
+        {
+            toRemoveM.push_back(k);
+        }
+        else
+        {
             if (!field->getBallAt(i,j).outOfField)
             {
                 if (acontainerMovedBalls[k].objects.back().posX == i && acontainerMovedBalls[k].objects.back().posY == j)
@@ -979,21 +1001,22 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
                     }
                 }
             }
+        }
     }
 
     for (unsigned int k = 0; k < toRemoveG.size();k++)
     {
-            acontainerGeneratedBalls.erase(acontainerGeneratedBalls.begin()+toRemoveG[k]);
+            acontainerGeneratedBalls.erase(acontainerGeneratedBalls.begin()+toRemoveG.at(k));
     }
 
     for (unsigned int k = 0; k < toRemoveR.size();k++)
     {
-            acontainerRemovedBalls.erase(acontainerRemovedBalls.begin()+toRemoveR[k]);
+            acontainerRemovedBalls.erase(acontainerRemovedBalls.begin()+toRemoveR.at(k));
     }
 
     for (unsigned int k = 0; k < toRemoveM.size();k++)
     {
-            acontainerMovedBalls.erase(acontainerMovedBalls.begin()+toRemoveM[k]);
+            acontainerMovedBalls.erase(acontainerMovedBalls.begin()+toRemoveM.at(k));
     }
 
 }
