@@ -4,25 +4,81 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+# qt definitions
+QT += core gui opengl
+
+# use widgets if qt is greater than 4
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
- win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../projects/mylib/release/ -lGLU -lglut
- else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../projects/mylib/debug/ --lGLU -lglut
- else:symbian:
- else:unix: LIBS += -lGLU -lglut -lX11
+# win/unix definitions
+win32:CONFIG(release, debug|release)
+{
+    win32-g++:contains(QMAKE_HOST.arch, x86_64):
+    {
+        #win 64 release
 
+        DESTDIR = win32release
+        LIBS += -Llib/win32/bin/ -lGLU -lglut
+        INCLUDEPATH += . lib/win32/include/
+    }
+    else
+    {
+        #win 32 release
+
+        DESTDIR = win64release
+        LIBS += -Llib/win64/bin/ -lGLU -lglut
+        INCLUDEPATH += . lib/win64/include/
+    }
+}
+else:win32:CONFIG(debug, debug|release)
+{
+    win32-g++:contains(QMAKE_HOST.arch, x86_64):
+    {
+        #win 64 debug
+
+        DESTDIR = win32debug
+        LIBS += -Llib/win32/bin/ -lGLU -lglut
+        INCLUDEPATH += . lib/win32/include/
+    }
+    else
+    {
+        #win 32 debug
+
+        DESTDIR = win64debug
+        LIBS += -Llib/win64/bin/ -lGLU -lglut
+        INCLUDEPATH += . lib/win64/include/
+    }
+}
+else:unix::CONFIG(release, debug|release)
+{
+    contains(QMAKE_HOST.arch, x86_64)
+    {
+        # 64-bit Unix
+
+        DESTDIR = unix64release
+        LIBS += -lGLU -lglut -lX11
+    }
+    else
+    {
+        # 32-bit Unix
+
+        DESTDIR = unix32release
+        LIBS += -lGLU -lglut -lX11
+    }
+}
+
+# use the c++11 standard
 CONFIG += c++11
 
-#LIBS += -lGLU -lglut #-lX11 #-lglut  # change this to the right path on system
 
-#LIBS += -L /usr/lib/x86_64-linux-gnu/ -lGLU -lglut  # change this to the right path on system
-
-
-
+# target name
 TARGET = flColorLines
+
+# template type: application
 TEMPLATE = app
 
+
+# sources/headers/forms to be used
 SOURCES += src/main.cpp\
     src/model/Model.Ball.cpp \
     src/model/Model.Color.cpp \
