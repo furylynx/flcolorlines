@@ -11,58 +11,81 @@ QT += core gui opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # win/unix definitions
-win32:CONFIG(release, debug|release)
-{
-    win32-g++:contains(QMAKE_HOST.arch, x86_64):
-    {
+win32:CONFIG(release, debug|release){
+    win32-g++:contains(QMAKE_HOST.arch, x86_64){
         #win 64 release
 
         DESTDIR = win32release
         LIBS += -Llib/win32/bin/ -lGLU -lglut
         INCLUDEPATH += . lib/win32/include/
-    }
-    else
-    {
+
+        # dlls to be copied to destination
+        MY_LIB_FILES += lib/win64/bin/freeglut.dll
+
+    }else{
         #win 32 release
 
         DESTDIR = win64release
         LIBS += -Llib/win64/bin/ -lGLU -lglut
         INCLUDEPATH += . lib/win64/include/
+
+        # dlls to be copied to destination
+        MY_LIB_FILES += lib/win32/bin/freeglut.dll
     }
-}
-else:win32:CONFIG(debug, debug|release)
-{
-    win32-g++:contains(QMAKE_HOST.arch, x86_64):
-    {
+
+    # copy dll to destination path
+    extra_libs.files = MY_LIB_FILES
+    extra_libs.path = $$DESTDIR
+
+}else:win32:CONFIG(debug, debug|release){
+    win32-g++:contains(QMAKE_HOST.arch, x86_64){
         #win 64 debug
 
         DESTDIR = win32debug
         LIBS += -Llib/win32/bin/ -lGLU -lglut
         INCLUDEPATH += . lib/win32/include/
-    }
-    else
-    {
+
+        # dlls to be copied to destination
+        MY_LIB_FILES += lib/win64/bin/freeglut.dll
+
+    }else{
         #win 32 debug
 
         DESTDIR = win64debug
         LIBS += -Llib/win64/bin/ -lGLU -lglut
         INCLUDEPATH += . lib/win64/include/
+
+        # dlls to be copied to destination
+        MY_LIB_FILES += lib/win32/bin/freeglut.dll
+
     }
-}
-else:unix::CONFIG(release, debug|release)
-{
-    contains(QMAKE_HOST.arch, x86_64)
-    {
+
+    # copy dll to destination path
+    extra_libs.files = MY_LIB_FILES
+    extra_libs.path = $$DESTDIR
+
+}else:unix::CONFIG(release, debug|release){
+    contains(QMAKE_HOST.arch, x86_64){
         # 64-bit Unix
 
         DESTDIR = unix64release
         LIBS += -lGLU -lglut -lX11
-    }
-    else
-    {
+    }else{
         # 32-bit Unix
 
         DESTDIR = unix32release
+        LIBS += -lGLU -lglut -lX11
+    }
+}else:unix::CONFIG(debug, debug|release){
+    contains(QMAKE_HOST.arch, x86_64){
+        # 64-bit Unix
+
+        DESTDIR = unix64debug
+        LIBS += -lGLU -lglut -lX11
+    }else{
+        # 32-bit Unix
+
+        DESTDIR = unix32debug
         LIBS += -lGLU -lglut -lX11
     }
 }
