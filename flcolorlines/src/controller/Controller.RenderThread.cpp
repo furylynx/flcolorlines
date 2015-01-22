@@ -96,18 +96,6 @@ void RenderThread::run( )
     // do as long as the flag is true
     while( render_flag )
     {
-
-        //std::cout << acontainerGeneratedBalls.size() << " | " << acontainerMovedBalls.size() << " | " << acontainerRemovedBalls.size() << std::endl;
-        //std::cout << selectedFieldsQueue.size() << std::endl;
-
-        // resize the GL viewport if requested
-        if (resize_flag)
-        {
-            resizeGL(viewport_size.width(), viewport_size.height());
-            resize_flag = false;
-        }
-
-
         //handle mouse clicks
         selectedFieldsMutex.lock();
         while(selectedFieldsQueue.size() > 0)
@@ -120,8 +108,21 @@ void RenderThread::run( )
 
 
         //handle mouse moves
-        setHoveredField(faceAtPosition(hoveredPoint));
+        if (hoveredPointChanged)
+        {
+            setHoveredField(faceAtPosition(hoveredPoint));
+            hoveredPointChanged = false;
+        }
 
+        //std::cout << acontainerGeneratedBalls.size() << " | " << acontainerMovedBalls.size() << " | " << acontainerRemovedBalls.size() << std::endl;
+        //std::cout << selectedFieldsQueue.size() << std::endl;
+
+        // resize the GL viewport if requested
+        if (resize_flag)
+        {
+            resizeGL(viewport_size.width(), viewport_size.height());
+            resize_flag = false;
+        }
 
         // render code goes here
         paintGL();
@@ -210,7 +211,7 @@ void RenderThread::draw()
 
 
     //calc frames
-    timespec timestampNow;
+    timeval timestampNow;
     clock_gettime(1, &timestampNow);
 
     long millisdiff = timeOperator->getTimeSinceMark();//((timestampNow.tv_sec - timestamp.tv_sec) * 1000) + ((timestampNow.tv_nsec - timestamp.tv_nsec) / 1000000);
@@ -781,9 +782,10 @@ void RenderThread::drawInitialAnimation()
     controller::GameController* controller = glw.getGameController();
     model::GameField* field = controller->getGameField();
 
-    timespec now;
+    timeval now;
     clock_gettime(1, &now);
-    long ms = timeOperator->getTimeDifference(timestampAnimation, now);
+//    long ms = timeOperator->getTimeDifference(timestampAnimation, now);
+    long ms = timeOperator->getTimeSince(timestampAnimation);
 
     if (ms > 3000)
     {
@@ -893,8 +895,8 @@ void RenderThread::drawInitialAnimation()
 
 void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int j, float dist, float *out_x, float *out_y, float *out_z, float *out_color, float *out_size)
 {
-    timespec now;
-    clock_gettime(1, &now);
+//    timespec now;
+//    clock_gettime(1, &now);
 
     *out_x = 0;
     *out_y = 0;
@@ -922,7 +924,8 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
                 {
                     if (acontainerGeneratedBalls[k].objects[l].posX == i && acontainerGeneratedBalls[k].objects[l].posY == j)
                     {
-                        long ms = timeOperator->getTimeDifference(acontainerGeneratedBalls[k].timestamp, now);
+//                        long ms = timeOperator->getTimeSince(acontainerGeneratedBalls[k].timestamp, now);
+                        long ms = timeOperator->getTimeSince(acontainerGeneratedBalls.at(k).timestamp);
 
                         if (ms < 2000)
                         {
@@ -956,7 +959,8 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
                 {
                     if (acontainerRemovedBalls[k].objects[l].posX == i && acontainerRemovedBalls[k].objects[l].posY == j)
                     {
-                        long ms = timeOperator->getTimeDifference(acontainerRemovedBalls[k].timestamp, now);
+//                        long ms = timeOperator->getTimeDifference(acontainerRemovedBalls[k].timestamp, now);
+                        long ms = timeOperator->getTimeSince(acontainerRemovedBalls.at(k).timestamp);
 
                         if (ms < 1000)
                         {
@@ -986,7 +990,8 @@ void RenderThread::calcAnimationTranslation(model::GameField *field, int i, int 
             {
                 if (acontainerMovedBalls[k].objects.back().posX == i && acontainerMovedBalls[k].objects.back().posY == j)
                 {
-                    long ms = timeOperator->getTimeDifference(acontainerMovedBalls[k].timestamp, now);
+                    //long ms = timeOperator->getTimeDifference(acontainerMovedBalls[k].timestamp, now);
+                    long ms = timeOperator->getTimeSince(acontainerMovedBalls.at(k).timestamp);
 
 //                  Calculate the current position during movement
                     if (ms < ((long)acontainerMovedBalls[k].objects.size()-1)*50)
@@ -1103,6 +1108,7 @@ void RenderThread::selectField(const QPoint &pos)
 void RenderThread::hoverField(const QPoint &pos)
 {
     hoveredPoint = pos;
+    hoveredPointChanged = true;
 }
 
 int RenderThread::faceAtPosition(const QPoint &pos)
@@ -1136,7 +1142,6 @@ int RenderThread::faceAtPosition(const QPoint &pos)
     draw();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-
 
     // finally release the rendering context again
     //TODO commented for internal use

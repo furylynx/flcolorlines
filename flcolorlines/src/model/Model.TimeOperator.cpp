@@ -2,12 +2,8 @@
 
 using namespace model;
 
-TimeOperator::TimeOperator(int precision)
+TimeOperator::TimeOperator()
 {
-    assert(precision > 0);
-
-    this->precision = precision;
-
     clock_gettime(1, &beginTimestamp);
     clock_gettime(1, &markTimestamp);
 }
@@ -16,27 +12,37 @@ TimeOperator::~TimeOperator()
 {
 }
 
-long TimeOperator::getTimeSinceBegin()
+long TimeOperator::getTimeSinceBegin() const
 {
-    timespec timeB;
-    clock_gettime(1, &timeB);
+//    timeval timeB;
+//    clock_gettime(1, &timeB);
 
-    return getTimeDifference(beginTimestamp, timeB);
+//    return getTimeDifference(beginTimestamp, timeB);
+    return getTimeSince(beginTimestamp);
 }
 
 
-long TimeOperator::getTimeSinceMark()
+long TimeOperator::getTimeSinceMark() const
 {
+//    timeval timeB;
+//    clock_gettime(1, &timeB);
 
-    timespec timeB;
-    clock_gettime(1, &timeB);
-
-    return getTimeDifference(markTimestamp, timeB);
+//    return getTimeDifference(markTimestamp, timeB);
+    return getTimeSince(markTimestamp);
 }
 
-long TimeOperator::getTimeDifference(timespec timeA, timespec timeB)
+long TimeOperator::getTimeSince(timeval timestamp) const
 {
-    return ((timeB.tv_sec - timeA.tv_sec) * 1000) + ((timeB.tv_nsec - timeA.tv_nsec) / precision);
+    timeval now;
+    clock_gettime(1, &now);
+
+    return getTimeDifference(timestamp, now);
+}
+
+long TimeOperator::getTimeDifference(timeval timeA, timeval timeB) const
+{      
+    //get difference in ms
+    return ((timeB.tv_sec - timeA.tv_sec) * 1000) + ((timeB.tv_usec - timeA.tv_usec) / 1000);
 }
 
 void TimeOperator::setMark()

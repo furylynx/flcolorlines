@@ -280,6 +280,11 @@ private:
      */
     QPoint hoveredPoint;
 
+    /**
+     * Flag whether the hovered point has changed
+     */
+    bool hoveredPointChanged;
+
 
     /**
      * The rotation value on the x-axis.
@@ -323,7 +328,7 @@ private:
     /**
      * Timestamp for the animation.
      */
-    timespec timestampAnimation;
+    timeval timestampAnimation;
 
     /**
      * Animation containers for generated balls.

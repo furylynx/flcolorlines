@@ -22,7 +22,7 @@ struct AnimationContainer
     /**
      * The beginning timestamp.
      */
-    timespec timestamp;
+    timeval timestamp;
 
 };
 

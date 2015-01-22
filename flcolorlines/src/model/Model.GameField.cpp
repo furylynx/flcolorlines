@@ -70,11 +70,6 @@ model::Ball GameField::removeBallAt(model::FieldPosition pos)
     assert(pos.posY >= 0);
     assert(pos.posY < dimy);
 
-    if ((pos.posX <0 || pos.posX >= dimx || pos.posY < 0 || pos.posY >= dimy))
-    {
-        int a = 0;
-    }
-
     model::Ball ret = getBallAt(pos);
 
     model::Ball ball;

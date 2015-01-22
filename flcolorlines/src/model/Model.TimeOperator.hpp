@@ -2,7 +2,7 @@
 #define MODEL_TIMEOPERATOR
 
 //custom includes
-//...
+#include "timespec.hpp"
 
 //global includes
 #include <ctime>
@@ -18,34 +18,40 @@ public:
 
     /**
      * Creates a new time operator.
-     *
-     * @param precision The precision of the time operator.
      */
-    TimeOperator(int precision = 1000000);
+    TimeOperator();
     virtual ~TimeOperator();
 
     /**
-     * Returns the time passed since the begin marker.
+     * Returns the time passed since the begin marker in milliseconds.
      *
      * @return The time passed.
      */
-    virtual long getTimeSinceBegin();
+    virtual long getTimeSinceBegin() const;
 
     /**
-     * Returns the time passed since the set marker.
+     * Returns the time passed since the set marker in milliseconds.
      *
      * @return The time passed.
      */
-    virtual long getTimeSinceMark();
+    virtual long getTimeSinceMark() const;
 
     /**
-     * Returns the time difference between the two timestamps.
+     * Returns the time passed since the timestamp in milliseconds.
+     *
+     * @param timestamp The timestamp.
+     * @return The time passed.
+     */
+    virtual long getTimeSince(timeval timestamp) const;
+
+    /**
+     * Returns the time difference between the two timestamps in milliseconds.
      *
      * @param timeA The first timestamp.
      * @param timeB The second timestamp.
      * @return The passed time.
      */
-    virtual long getTimeDifference(timespec timeA, timespec timeB);
+    virtual long getTimeDifference(timeval timeA, timeval timeB) const;
 
     /**
      * Sets the time marker at the current time.
@@ -57,17 +63,12 @@ private:
     /**
      * The begin time marker.
      */
-    timespec beginTimestamp;
+    timeval beginTimestamp;
 
     /**
      * The set time marker.
      */
-    timespec markTimestamp;
-
-    /**
-     * The precision to be applied.
-     */
-    int precision;
+    timeval markTimestamp;
 
 };
 
