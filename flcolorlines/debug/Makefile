@@ -1907,7 +1907,7 @@ UI.OptionsFrame.o: ../src/ui/UI.OptionsFrame.cpp ../src/ui/UI.OptionsFrame.hpp \
 		/usr/include/qt5/QtWidgets/qmainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o UI.OptionsFrame.o ../src/ui/UI.OptionsFrame.cpp
 
-timespec.o: ../src/model/timespec.cpp ../src/model/timespec.hpp
+timespec.o: ../src/model/timespec.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o timespec.o ../src/model/timespec.cpp
 
 moc_UI.HighscoresFrame.o: moc_UI.HighscoresFrame.cpp 

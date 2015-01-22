@@ -4,8 +4,8 @@ using namespace model;
 
 TimeOperator::TimeOperator()
 {
-    clock_gettime(1, &beginTimestamp);
-    clock_gettime(1, &markTimestamp);
+    beginTimestamp = getCurrentTime();
+    markTimestamp = getCurrentTime();
 }
 
 TimeOperator::~TimeOperator()
@@ -14,29 +14,18 @@ TimeOperator::~TimeOperator()
 
 long TimeOperator::getTimeSinceBegin() const
 {
-//    timeval timeB;
-//    clock_gettime(1, &timeB);
-
-//    return getTimeDifference(beginTimestamp, timeB);
     return getTimeSince(beginTimestamp);
 }
 
 
 long TimeOperator::getTimeSinceMark() const
 {
-//    timeval timeB;
-//    clock_gettime(1, &timeB);
-
-//    return getTimeDifference(markTimestamp, timeB);
     return getTimeSince(markTimestamp);
 }
 
 long TimeOperator::getTimeSince(timeval timestamp) const
 {
-    timeval now;
-    clock_gettime(1, &now);
-
-    return getTimeDifference(timestamp, now);
+    return getTimeDifference(timestamp, getCurrentTime());
 }
 
 long TimeOperator::getTimeDifference(timeval timeA, timeval timeB) const
@@ -47,6 +36,17 @@ long TimeOperator::getTimeDifference(timeval timeA, timeval timeB) const
 
 void TimeOperator::setMark()
 {
-    clock_gettime(1, &markTimestamp);
+    markTimestamp = getCurrentTime();
+}
+
+timeval TimeOperator::getCurrentTime() const
+{
+    timeval now;
+
+    auto chronoNow = std::chrono::system_clock::now().time_since_epoch();
+    now.tv_sec = std::chrono::duration_cast<std::chrono::seconds>(chronoNow).count();
+    now.tv_usec = std::chrono::duration_cast<std::chrono::microseconds>(chronoNow).count() - now.tv_sec * 1000000;
+
+    return now;
 }
 

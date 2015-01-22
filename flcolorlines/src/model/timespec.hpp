@@ -1,22 +1,22 @@
-#ifndef TIMESPEC_HPP
-#define TIMESPEC_HPP
+//#ifndef TIMESPEC_HPP
+//#define TIMESPEC_HPP
 
-//custom includes
+////custom includes
 
-//global includes
-#include <ctime>
+////global includes
+//#include <ctime>
 
-#ifdef _WIN32
-    #include <windows.h>
+//#ifdef _WIN32
+////    #include <windows.h>
 
-extern LARGE_INTEGER getFILETIMEoffset();
+////extern LARGE_INTEGER getFILETIMEoffset();
 
-extern int clock_gettime(int X, struct timeval *tv);
+//extern int clock_gettime(int X, struct timeval *tv);
 
-#else
+//#else
 
-extern int clock_gettime(int X, struct timeval *tv);
+//extern int clock_gettime(int X, struct timeval *tv);
 
-#endif
+//#endif
 
-#endif // TIMESPEC_HPP
+//#endif // TIMESPEC_HPP

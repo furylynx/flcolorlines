@@ -7,6 +7,7 @@
 //global includes
 #include <ctime>
 #include <cassert>
+#include <chrono>
 
 namespace model
 {
@@ -57,6 +58,13 @@ public:
      * Sets the time marker at the current time.
      */
     virtual void setMark();
+
+    /**
+     * Returns the current timestamp as a timeval struct (microsecond precision).
+     *
+     * @return The timeval.
+     */
+    virtual timeval getCurrentTime() const;
 
 
 private:

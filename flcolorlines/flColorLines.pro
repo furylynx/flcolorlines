@@ -20,12 +20,25 @@ win32:CONFIG(release, debug|release){
         #win 64 release
         message( "Building RELEASE for WIN 64 bit")
 
+        #TODO this is printed even if we are compiling for 32 bit ...
+
         #DESTDIR = win64release
-        LIBS += -Llib/win64/bin/ -lfreeglut
-        INCLUDEPATH += . lib/win64/include/
+        LIBS += -L/sda7/data/workspace-git/flcolorlines/flcolorlines/lib/win32/lib/ -lfreeglut #-lmsvcrt
+        INCLUDEPATH += . lib/win32/include/
 
         # dlls to be copied to destination
-        MY_LIB_FILES += lib/win64/bin/freeglut.dll
+        MY_LIB_FILES += lib/win32/bin/freeglut.dll
+
+QMAKE_LFLAGS += -static
+QMAKE_LFLAGS += -static-libgcc
+QMAKE_LFLAGS += -static-libstdc++
+QMAKE_LFLAGS += -mwindows
+
+#        LIBS += -Llib/win64/bin/ -lfreeglut
+#        INCLUDEPATH += . lib/win64/include/
+#
+#        # dlls to be copied to destination
+#        MY_LIB_FILES += lib/win64/bin/freeglut.dll
 
     }else{
 

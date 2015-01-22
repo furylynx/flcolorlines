@@ -211,9 +211,6 @@ void RenderThread::draw()
 
 
     //calc frames
-    timeval timestampNow;
-    clock_gettime(1, &timestampNow);
-
     long millisdiff = timeOperator->getTimeSinceMark();//((timestampNow.tv_sec - timestamp.tv_sec) * 1000) + ((timestampNow.tv_nsec - timestamp.tv_nsec) / 1000000);
 
     if (millisdiff == 0)
@@ -782,8 +779,8 @@ void RenderThread::drawInitialAnimation()
     controller::GameController* controller = glw.getGameController();
     model::GameField* field = controller->getGameField();
 
-    timeval now;
-    clock_gettime(1, &now);
+    timeval now = timeOperator->getCurrentTime();
+
 //    long ms = timeOperator->getTimeDifference(timestampAnimation, now);
     long ms = timeOperator->getTimeSince(timestampAnimation);
 
@@ -1244,17 +1241,17 @@ void RenderThread::setSelectedField(int face)
 
                 model::AnimationContainer container3;
                 container3.objects = path;
-                clock_gettime(1, &container3.timestamp);
+                container3.timestamp = timeOperator->getCurrentTime();
                 acontainerMovedBalls.push_back(container3);
 
                 model::AnimationContainer container;
                 container.objects = controller->getLastGeneratedBalls();
-                clock_gettime(1, &container.timestamp);
+                container.timestamp = timeOperator->getCurrentTime();
                 acontainerGeneratedBalls.push_back(container);
 
                 model::AnimationContainer container2;
                 container2.objects = controller->getLastRemovedBalls();
-                clock_gettime(1, &container2.timestamp);
+                container2.timestamp = timeOperator->getCurrentTime();
                 acontainerRemovedBalls.push_back(container2);
 
 
@@ -1300,7 +1297,7 @@ void RenderThread::qColorToQuadcolor(QColor c, float* result) const
 
 void RenderThread::beginInitialAnimation(){
 
-    clock_gettime(1, &timestampAnimation);
+    timestampAnimation = timeOperator->getCurrentTime();
 
     rotationX = 0;
     rotationY = 0;
