@@ -81,9 +81,9 @@ void RenderThread::stop( )
 void RenderThread::run( )
 {
 
-    //TODO makeCurrent causes a crash with qt5
-    while (!glw.isVisible())
-    { }
+    //makeCurrent causes a crash with qt5
+//    while (!glw.isVisible())
+//    { }
 
 
     // lock the render mutex of the Gl widget

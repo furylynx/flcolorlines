@@ -2,7 +2,7 @@
 #define MODEL_TIMEOPERATOR
 
 //custom includes
-#include "timespec.hpp"
+//...
 
 //global includes
 #include <ctime>

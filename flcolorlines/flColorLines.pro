@@ -15,42 +15,53 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # win/unix definitions
 win32:CONFIG(release, debug|release){
-    win32-g++:contains(QMAKE_HOST.arch, x86_64){
+    win32-g++:contains(QMAKE_TARGET.arch, x86_64){
 
         #win 64 release
         message( "Building RELEASE for WIN 64 bit")
 
-        #TODO this is printed even if we are compiling for 32 bit ...
+        DESTDIR = $$PWD/win64release/
+        RCC_DIR = $$PWD/win64release-src/
+        OBJECTS_DIR = $$PWD/win64release-src/
+        MOC_DIR = $$PWD/win64release-src/
+        UI_DIR = $$PWD/win64release-src/
 
-        #DESTDIR = win64release
-        LIBS += -L/sda7/data/workspace-git/flcolorlines/flcolorlines/lib/win32/lib/ -lfreeglut #-lmsvcrt
-        INCLUDEPATH += . lib/win32/include/
+        LIBS += -L$$PWD/lib/win64/lib/ -lfreeglut -lglut32 -lopengl32 -lglu32
+        INCLUDEPATH += . $$PWD/lib/win64/include/
 
         # dlls to be copied to destination
-        MY_LIB_FILES += lib/win32/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win64/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win64/copying_freeglut.txt
 
-QMAKE_LFLAGS += -static
-QMAKE_LFLAGS += -static-libgcc
-QMAKE_LFLAGS += -static-libstdc++
-QMAKE_LFLAGS += -mwindows
-
-#        LIBS += -Llib/win64/bin/ -lfreeglut
-#        INCLUDEPATH += . lib/win64/include/
-#
-#        # dlls to be copied to destination
-#        MY_LIB_FILES += lib/win64/bin/freeglut.dll
+        #qmake flags for a static build as it is required for freeglut with mingw
+        QMAKE_LFLAGS += -static
+        QMAKE_LFLAGS += -static-libgcc
+        QMAKE_LFLAGS += -static-libstdc++
+        QMAKE_LFLAGS += -mwindows
 
     }else{
 
         #win 32 release
         message( "Building RELEASE for WIN 32 bit")
 
-        #DESTDIR = win32release
-        LIBS += -Llib/win32/bin/ -lfreeglut
-        INCLUDEPATH += . lib/win32/include/
+        DESTDIR = $$PWD/win32release/
+        RCC_DIR = $$PWD/win32release-src/
+        OBJECTS_DIR = $$PWD/win32release-src/
+        MOC_DIR = $$PWD/win32release-src/
+        UI_DIR = $$PWD/win32release-src/
+
+        LIBS += -L$$PWD/lib/win32/lib/ -lfreeglut -lglut32 -lopengl32 -lglu32
+        INCLUDEPATH += . $$PWD/lib/win32/include/
 
         # dlls to be copied to destination
-        MY_LIB_FILES += lib/win32/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win32/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win32/copying_freeglut.txt
+
+        #qmake flags for a static build as it is required for freeglut with mingw
+        QMAKE_LFLAGS += -static
+        QMAKE_LFLAGS += -static-libgcc
+        QMAKE_LFLAGS += -static-libstdc++
+        QMAKE_LFLAGS += -mwindows
     }
 
     # copy dll to destination path
@@ -58,30 +69,53 @@ QMAKE_LFLAGS += -mwindows
     extra_libs.path = $$DESTDIR
 
 }else:win32:CONFIG(debug, debug|release){
-    win32-g++:contains(QMAKE_HOST.arch, x86_64){
+    win32-g++:contains(QMAKE_TARGET.arch, x86_64){
 
         #win 64 debug
         message( "Building DEBUG for WIN 64 bit")
 
-        #DESTDIR = win64debug
-        LIBS += -Llib/win64/bin/ -lfreeglut
-        INCLUDEPATH += . lib/win64/include/
+        DESTDIR = $$PWD/win64debug/
+        RCC_DIR = $$PWD/win64debug-src/
+        OBJECTS_DIR = $$PWD/win64debug-src/
+        MOC_DIR = $$PWD/win64debug-src/
+        UI_DIR = $$PWD/win64debug-src/
+
+        LIBS += -L$$PWD/lib/win64/bin/ -lfreeglut -lglut32 -lopengl32 -lglu32
+        INCLUDEPATH += . $$PWD/lib/win64/include/
 
         # dlls to be copied to destination
-        MY_LIB_FILES += lib/win64/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win64/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win64/copying_freeglut.txt
+
+        #qmake flags for a static build as it is required for freeglut with mingw
+        QMAKE_LFLAGS += -static
+        QMAKE_LFLAGS += -static-libgcc
+        QMAKE_LFLAGS += -static-libstdc++
+        QMAKE_LFLAGS += -mwindows
 
     }else{
-message( "Building for 32 bit")
 
         #win 32 debug
         message( "Building DEBUG for WIN 32 bit")
 
-        #DESTDIR = win32debug
-        LIBS += -Llib/win32/bin/-lfreeglut
-        INCLUDEPATH += . lib/win32/include/
+        DESTDIR = $$PWD/win32debug/
+        RCC_DIR = $$PWD/win32debug-src/
+        OBJECTS_DIR = $$PWD/win32debug-src/
+        MOC_DIR = $$PWD/win32debug-src/
+        UI_DIR = $$PWD/win32debug-src/
+
+        LIBS += -L$$PWD/lib/win32/lib/ -lfreeglut -lglut32 -lopengl32 -lglu32
+        INCLUDEPATH += . $$PWD/lib/win32/include/
 
         # dlls to be copied to destination
-        MY_LIB_FILES += lib/win32/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win32/bin/freeglut.dll
+        MY_LIB_FILES += $$PWD/lib/win32/copying_freeglut.txt
+
+        #qmake flags for a static build as it is required for freeglut with mingw
+        QMAKE_LFLAGS += -static
+        QMAKE_LFLAGS += -static-libgcc
+        QMAKE_LFLAGS += -static-libstdc++
+        QMAKE_LFLAGS += -mwindows
 
     }
 
@@ -91,26 +125,54 @@ message( "Building for 32 bit")
 
 }else:unix::CONFIG(release, debug|release){
     contains(QMAKE_HOST.arch, x86_64){
-        # 64-bit Unix
 
-        #DESTDIR = unix64release
+        # 64-bit Unix
+        message( "Building RELEASE for UNIX 64 bit")
+
+        DESTDIR = $$PWD/unix64release/
+        RCC_DIR = $$PWD/unix64release-src/
+        OBJECTS_DIR = $$PWD/unix64release-src/
+        MOC_DIR = $$PWD/unix64release-src/
+        UI_DIR = $$PWD/unix64release-src/
+
         LIBS += -lGLU -lglut -lX11
     }else{
-        # 32-bit Unix
 
-        #DESTDIR = unix32release
+        # 32-bit Unix
+        message( "Building RELEASE for UNIX 32 bit")
+
+        DESTDIR = $$PWD/unix32release/
+        RCC_DIR = $$PWD/unix32release-src/
+        OBJECTS_DIR = $$PWD/unix32release-src/
+        MOC_DIR = $$PWD/unix32release-src/
+        UI_DIR = $$PWD/unix32release-src/
+
         LIBS += -lGLU -lglut -lX11
     }
 }else:unix::CONFIG(debug, debug|release){
     contains(QMAKE_HOST.arch, x86_64){
-        # 64-bit Unix
 
-        #DESTDIR = unix64debug
+        # 64-bit Unix
+        message( "Building DEBUG for UNIX 64 bit")
+
+        DESTDIR = $$PWD/unix64debug/
+        RCC_DIR = $$PWD/unix64debug-src/
+        OBJECTS_DIR = $$PWD/unix64debug-src/
+        MOC_DIR = $$PWD/unix64debug-src/
+        UI_DIR = $$PWD/unix64debug-src/
+
         LIBS += -lGLU -lglut -lX11
     }else{
-        # 32-bit Unix
 
-        #DESTDIR = unix32debug
+        # 32-bit Unix
+        message( "Building DEBUG for UNIX 32 bit")
+
+        DESTDIR = $$PWD/unix32debug/
+        RCC_DIR = $$PWD/unix32debug-src/
+        OBJECTS_DIR = $$PWD/unix32debug-src/
+        MOC_DIR = $$PWD/unix32debug-src/
+        UI_DIR = $$PWD/unix32debug-src/
+
         LIBS += -lGLU -lglut -lX11
     }
 }
@@ -141,8 +203,7 @@ SOURCES += src/main.cpp\
     src/ui/UI.GLWidget.cpp \
     src/ui/UI.HighscoresFrame.cpp \
     src/ui/UI.MainWindow.cpp \
-    src/ui/UI.OptionsFrame.cpp \
-    src/model/timespec.cpp
+    src/ui/UI.OptionsFrame.cpp
 
 HEADERS  += \
     src/controller/Controller.RenderThread.hpp \
@@ -160,8 +221,7 @@ HEADERS  += \
     src/ui/UI.HighscoresFrame.hpp \
     src/ui/UI.MainWindow.hpp \
     src/ui/UI.OptionsFrame.hpp \
-    src/ui/UI.GLWidget.hpp \
-    src/model/timespec.hpp
+    src/ui/UI.GLWidget.hpp
 
 FORMS    += src/ui/mainwindow.ui \
     src/ui/optionsframe.ui \
